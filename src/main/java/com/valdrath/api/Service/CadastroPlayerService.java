@@ -1,7 +1,9 @@
 package com.valdrath.api.Service;
 
 import com.valdrath.api.Cutscene.CutsceneView;
+import com.valdrath.api.Model.Personagem;
 import com.valdrath.api.Model.Player;
+import com.valdrath.api.Repository.PersonagemRepository;
 import com.valdrath.api.Repository.PlayerRepository;
 import com.valdrath.api.Exception.ValdrathException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +12,16 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.Scanner;
 
+import static com.valdrath.api.Principal.Principal.pulaLinhas;
+
 @Service
 public class CadastroPlayerService {
 
     @Autowired
     private PlayerRepository playerRepository;
+
+    @Autowired
+    private PersonagemRepository personagemRepository;
 
     @Autowired
     private CadastroPersonagemService cadastroPersonagem;
@@ -31,8 +38,7 @@ public class CadastroPlayerService {
                 - Você já esteve aqui antes?
                 [ sim ] Login
                 [ não ] Cadastro
-                >>>>>
-                """);
+                >>>>>""");
 
         String opcao = l.nextLine().trim().toLowerCase();
 
@@ -43,21 +49,38 @@ public class CadastroPlayerService {
 
         try{
 
+            Player playerLogado;
+
             if(opcao.equals("sim")){
-                LogarPlayer();
-                cutscineInicial.iniciarCutsceneAbertura(l);
+                playerLogado = LogarPlayer();
             }else{
-                CadastroPlayer();
-                cutscineInicial.iniciarCutsceneAbertura(l);
+                playerLogado = CadastroPlayer();
             }
+
+            if(playerLogado != null){
+                verificarCutscene(playerLogado);
+            }
+
         }catch(ValdrathException e){
             e.getMessage();
         }
 
     }
 
-    public void CadastroPlayer(){
+    public void verificarCutscene(Player player){
+        Personagem personagem = personagemRepository.findByPlayer(player);
 
+        if(personagem != null && !personagem.isViuAberturaCutsene()){
+            cutscineInicial.iniciarCutsceneAbertura(l);
+
+            personagem.setViuAberturaCutsene(true);
+            personagemRepository.save(personagem);
+        }
+    }
+
+    public Player CadastroPlayer(){
+
+        pulaLinhas(37);
         try {
             Player playerLogado = new Player();
 
@@ -71,11 +94,13 @@ public class CadastroPlayerService {
             int idade = Integer.parseInt(l.nextLine().trim());
             playerLogado.setIdade(idade);
 
-            System.out.println("Digite o email da sua conta: ");
+            System.out.print("Digite o email da sua conta: ");
             String email = l.nextLine().trim();
+
+            email = playerLogado.verificarEmail(email);
             playerLogado.setEmail(email);
 
-            System.out.println("Digite a senha: ");
+            System.out.print("Digite a senha: ");
             String senha = l.nextLine().trim();
             playerLogado.setSenha_conta(senha);
 
@@ -83,38 +108,44 @@ public class CadastroPlayerService {
 
             cadastroPersonagem.cadastroPersonagem(playerLogado);
 
+            return playerLogado;
+
         }catch (ValdrathException e) {
             e.getMessage();
+            return null;
         }
     }
 
-    public void LogarPlayer(){
+    public Player LogarPlayer(){
 
+        pulaLinhas(37);
         try {
             System.out.println("<< =============== Logando Player =============== >>");
 
             System.out.print("Digite o email da sua conta: ");
             String email = l.nextLine().trim();
 
-            System.out.println("Digite a senha: ");
+            System.out.print("Digite a senha: ");
             String senha = l.nextLine().trim();
 
             Optional<Player> player = playerRepository.findByEmail(email);
 
             if (player.isEmpty()) {
                 System.out.println("Email/Senha incorretos. ");
-                return;
+                return null;
             }
 
             if (!player.get().getSenha_conta().equals(senha)) {
                 System.out.println("Senha incorreta.");
-                return;
+                return null;
             }
 
             System.out.println("Login realizado com sucesso!");
+            return player.get();
+
         }catch (ValdrathException e){
             e.getMessage();
+            return null;
         }
-
     }
 }

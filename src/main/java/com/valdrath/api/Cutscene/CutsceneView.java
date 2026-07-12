@@ -5,11 +5,16 @@ import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
 
+import static com.valdrath.api.Principal.Principal.esperaENTER;
+import static com.valdrath.api.Principal.Principal.pulaLinhas;
+
 @Component
 public class CutsceneView {
 
 
     public void iniciarCutsceneAbertura(Scanner l) {
+
+        pulaLinhas(50);
 
         System.out.println("""
                 Há muito tempo, dragões e homens viviam em equilíbrio...
@@ -53,7 +58,7 @@ public class CutsceneView {
         Principal.delay(3000);
 
         System.out.println("""
-                Um dragão de categoria altíssima, adormecido há gerações nas montanhas ao norte, agora pairava sobre as torres do castelo.
+        Um dragão de categoria altíssima, adormecido há gerações nas montanhas ao norte, agora pairava sobre as torres do castelo.
         """);
 
         Principal.delay(2500);
@@ -65,7 +70,7 @@ public class CutsceneView {
         Principal.delay(2500);
 
         System.out.println("""
-                Em meio ao caos, gritos, fogo e destruição... alguém sobreviveu.
+        Em meio ao caos, gritos, fogo e destruição... alguém sobreviveu.
         """);
 
         Principal.delay(1800);
@@ -73,11 +78,6 @@ public class CutsceneView {
         System.out.println("\nVocê.");
         Principal.delay(2000);
 
-        aguardarEnter(l);
-    }
-
-    private void aguardarEnter(Scanner l) {
-        System.out.println("\n\nPressione ENTER para continuar...");
-        l.nextLine();
+        esperaENTER(l);
     }
 }

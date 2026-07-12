@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import static com.valdrath.api.Model.Classe.escolherClasse;
 import static com.valdrath.api.Principal.Principal.delay;
+import static com.valdrath.api.Principal.Principal.pulaLinhas;
 
 @Service
 public class CadastroPersonagemService {
@@ -28,10 +29,10 @@ public class CadastroPersonagemService {
             personagem = new Personagem();
             personagem.setPlayer(player);
 
-            delay(6000);
-            System.out.println(" << ==================== Cadastro Personagem ==================== >> ");
+            pulaLinhas(37);
+            System.out.println("<< ==================== Cadastro Personagem ==================== >>");
 
-            delay(4000);
+            delay(500);
 
             System.out.println("""
                     - O que deseja ser? 

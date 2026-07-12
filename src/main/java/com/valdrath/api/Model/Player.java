@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "player")
@@ -35,6 +37,19 @@ public class Player {
         this.idade = idade;
         this.email = email;
         this.senha_conta = senha_conta;
+    }
+
+    public String verificarEmail(String email) {
+        Scanner l = new Scanner(System.in);
+
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+
+        while (!pattern.matcher(email).matches()) {
+            System.out.println("Email inválido!");
+            System.out.print("Digite seu email novamente: ");
+            email = l.nextLine();
+        }
+        return email;
     }
 
     public String getNome() {

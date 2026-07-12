@@ -20,6 +20,8 @@ public class Personagem {
     private double dano;
     private int level;
 
+    private boolean viuAberturaCutsene;
+
     public Personagem() {
 
     }
@@ -89,5 +91,13 @@ public class Personagem {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public boolean isViuAberturaCutsene() {
+        return viuAberturaCutsene;
+    }
+
+    public void setViuAberturaCutsene(boolean viuAberturaCutsene) {
+        this.viuAberturaCutsene = viuAberturaCutsene;
     }
 }

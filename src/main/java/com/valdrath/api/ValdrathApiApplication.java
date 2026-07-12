@@ -5,6 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.valdrath.api.Principal.Principal;
 
+import static com.valdrath.api.Principal.Principal.delay;
+
 @SpringBootApplication
 public class ValdrathApiApplication implements CommandLineRunner {
 
@@ -24,6 +26,8 @@ public class ValdrathApiApplication implements CommandLineRunner {
     public void run(String... args) {
 
         principal.rodandoJogo();
+
+        delay(500);
 
         System.out.println("FIM DO PROGRAMA");
 
